@@ -1,0 +1,35 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+    public static int compareArray(int[] arr1, int[] arr2) {
+        if (arr1.length != arr2.length)
+            return 0;
+        for (int i = 0; i < arr1.length; i++) {
+            if (arr1[i] != arr2[i])
+                return 0;
+        }
+        return 1;
+    }
+
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        Scanner sc = new Scanner(System.in);
+        int n =  sc.nextInt();
+        for(int test = 0; test < n; test++){
+            int n1 =  sc.nextInt();
+            int[] arr1 =  new int[n1];
+            for(int a0 = 0; a0 < n1; a0++){
+                arr1[a0] = sc.nextInt();
+            }
+            int n2 =  sc.nextInt();
+            int[] arr2 =  new int[n2];
+            for(int a0 = 0; a0 < n2; a0++){
+                arr2[a0] = sc.nextInt();
+            }
+            System.out.println( compareArray(arr1, arr2));
+        }
+        sc.close();
+    }
+
+}
