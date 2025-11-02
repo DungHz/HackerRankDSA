@@ -1,0 +1,1 @@
+Ko nên vì Selection Sort cần truy cập ngẫu nhiên, hoán đổi phần tử nhiều, còn Insertion Sort có thể dùng được, nhưng việc tìm vị trí chèn vẫn tốn thời gian
