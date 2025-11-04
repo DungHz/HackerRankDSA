@@ -1,0 +1,61 @@
+class Result {
+    static class Pair implements Comparable<Pair>{
+        int val;
+        int cnt;
+
+        public Pair(int val, int cnt) {
+            this.val = val;
+            this.cnt = cnt;
+        }
+
+        @Override
+        public int compareTo(Pair o) {
+            if(this.val != o.val) {
+                return Integer.compare(this.val, o.val);
+            }
+            return Integer.compare(this.cnt, o.cnt);
+        }
+    }
+
+    public static List<Double> runningMedian(List<Integer> a) {
+        // Write your code here
+        TreeSet<Pair> pairs = new TreeSet<>();
+        List<Double> ans = new ArrayList<>();
+        Pair median = null;
+
+        for(int i = 0; i < a.size(); i++) {
+            Pair x = new Pair(a.get(i), i);
+
+            if(pairs.isEmpty()) {
+                pairs.add(x);
+                median = x;
+                ans.add((double)median.val);
+                continue;
+            }
+
+            boolean wasEven = (pairs.size() % 2 == 0);
+            pairs.add(x);
+
+            if(wasEven) {
+                if(x.compareTo(median) > 0) {
+                    median = pairs.higher(median);
+                }
+            } else {
+                if(x.compareTo(median) < 0) {
+                    median = pairs.lower(median);
+                }
+            }
+
+            if(pairs.size() % 2 != 0) {
+                ans.add((double)median.val);
+            } else {
+                Pair lower = median;
+                Pair higher = pairs.higher(median);
+                ans.add((higher.val + lower.val)/2.0);
+            }
+        }
+
+        return ans;
+    }
+
+}

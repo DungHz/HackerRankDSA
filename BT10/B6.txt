@@ -1,0 +1,120 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+    static class Node {
+        int key;
+        int height;
+        Node left;
+        Node right;
+        public Node(int key){
+            this.key = key;
+            this.height = 1;
+        }
+    }
+
+    static class AVLTree {
+        Node root;
+
+        static int height(Node node){
+            if(node == null) return 0;
+            return node.height;
+        }
+
+        static int getBalance(Node node){
+            if(node == null) return 0;
+            return height(node.left) - height(node.right);
+        }
+
+        static Node rightRotate(Node node){
+            Node x = node.left;
+            Node T2 = x.right;
+
+            x.right = node;
+            node.left = T2;
+
+            node.height = Math.max(height(node.left), height(node.right)) + 1;
+            x.height = Math.max(height(x.left), height(x.right)) + 1;
+
+            return x;
+        }
+
+        static Node leftRotate(Node node){
+            Node x = node.right;
+            Node T2 = x.left;
+            x.left = node;
+            node.right = T2;
+            node.height = Math.max(height(node.left), height(node.right)) + 1;
+            x.height = Math.max(height(x.left), height(x.right)) + 1;
+            return x;
+        }
+
+        Node insert(Node node, int key){
+            if(node == null)
+                return new Node(key);
+
+            if(key < node.key)
+                node.left = insert(node.left, key);
+            else if(key > node.key)
+                node.right = insert(node.right, key);
+            else
+                return node;
+
+            node.height = 1 + Math.max(height(node.left), height(node.right));
+
+            int balance = getBalance(node);
+
+            if(balance > 1 && key < node.left.key)
+                return rightRotate(node);
+
+            if(balance < -1 && key > node.right.key)
+                return leftRotate(node);
+
+            if(balance > 1 && key > node.left.key){
+                node.left = leftRotate(node.left);
+                return rightRotate(node);
+            }
+
+            if(balance < -1 && key < node.right.key){
+                node.right = rightRotate(node.right);
+                return leftRotate(node);
+            }
+
+            return node;
+        }
+
+        public static void inorder(Node node){
+            if(node != null){
+                inorder(node.left);
+                System.out.print(node.key + "(BF=" + getBalance(node) + ") ");
+                inorder(node.right);
+            }
+        }
+
+        public static void preorder(Node node){
+            if(node != null){
+                System.out.print(node.key + "(BF=" + getBalance(node) + ") ");
+                preorder(node.left);
+                preorder(node.right);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        AVLTree tree = new AVLTree();
+
+        int n = sc.nextInt();
+
+        for(int i = 0; i <= n; i++){
+            int key = sc.nextInt();
+            tree.root = tree.insert(tree.root, key);
+        }
+
+        AVLTree.inorder(tree.root);
+        System.out.println();
+        AVLTree.preorder(tree.root);
+
+        sc.close();
+    }
+}

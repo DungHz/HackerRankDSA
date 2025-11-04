@@ -1,0 +1,62 @@
+import java.io.*;
+import java.util.*;
+
+class Student {
+    int id;
+    String name;
+    double cgpa;
+    Student(String name, double cgpa, int id){
+        this.name = name;
+        this.cgpa = cgpa;
+        this.id = id;
+    }
+}
+
+class StudentComparator implements Comparator<Student>
+{
+    @Override
+    public int compare(Student x, Student y)
+    {
+        //Complete your code
+        if(x.cgpa != y.cgpa) {
+            return Double.compare(y.cgpa, x.cgpa);
+        } else if (!x.name.equals(y.name)) {
+            return x.name.compareTo(y.name);
+        } else {
+            return Integer.compare(x.id, y.id);
+        }
+    }
+}
+
+public class Solution {
+
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        PriorityQueue<Student> students = new PriorityQueue<>(new StudentComparator());
+
+        Scanner scan = new Scanner(System.in);
+        int n =  scan.nextInt();
+        while (n-- > 0) {
+            String txt = scan.next();
+            if(txt.equals("ENTER")) {
+                String name = scan.next();
+                double cgpa = scan.nextDouble();
+                int id = scan.nextInt();
+                students.add(new Student(name, cgpa, id));
+            }
+            else if(txt.equals("SERVED")) {
+                students.poll();
+            }
+        }
+
+        if(students.isEmpty())
+            System.out.println("EMPTY");
+        else {
+            List<Student> newS = new ArrayList<>(students);
+            Collections.sort(newS, new StudentComparator());
+            for(Student student : newS) {
+                System.out.println(student.name);
+            }
+        }
+    }
+}
